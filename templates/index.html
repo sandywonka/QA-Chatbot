@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+  </head>
+  <body>
+    <h1>QA Chatbot</h1>
+    <h3>A web implementation of <a href="https://github.com/gunthercox/ChatterBot">ChatterBot</a></h3>
+    <h3>Using python, flask, websocket, docker, and gitlab</h3>
+      <div id="chat">
+      </div>
+        <input id="inp_message" type="text" name="inp_message" placeholder="Message">
+        <input id="send" type="submit" value="Send">
+        <script type="text/javascript" charset="utf-8">
+          let chat = document.getElementById('chat');
+          let inp_message = document.getElementById('inp_message');
+          let send = document.getElementById('send');
+
+
+
+        var socket = io();
+        socket.connect();
+        socket.on('connect', function(){
+          console.log('Connected!');
+          ptag = document.createElement('p');
+          ptag.innerHTML = 'Websocket connected!';
+          chat.appendChild(ptag);
+        });
+        ptag = document.createElement('p');
+        ptag.innerHTML = 'Welcome to QA Chatbot';
+        chat.appendChild(ptag);
+        send.onclick = function() {
+          socket.emit('data', inp_message.value);
+          inp_message.value = '';
+        };
+        socket.on('returndata', function(data){
+          ptag = document.createElement('p');
+          ptag.innerHTML = data;
+          chat.appendChild(ptag);
+        });
+        </script>
+  </body>
+</html>
